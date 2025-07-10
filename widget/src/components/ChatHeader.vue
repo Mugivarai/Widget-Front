@@ -57,7 +57,7 @@ export default {
 <style scoped>
 header {
     width: 100%;
-    height: 50px;
+    height: var(--height-widget-header);
     background-color: var(--primary);
     padding: 0px 10px;
     display: flex;
@@ -207,7 +207,7 @@ header {
     height: 28px;
     background-color: var(--accent);
     border-radius: 50%;
-    transition: all 0.3s linear;
+    transition: all 0.3s ease-in-out;
     z-index: 1;
 }
 

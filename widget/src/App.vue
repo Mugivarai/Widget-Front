@@ -1,128 +1,10 @@
-<!-- <template>
-  <div class="container">
-    <div 
-      class="circle" 
-      @click="openWindow"
-      :style="{ backgroundColor: circleColor }"
-    ></div>
-
-    <div 
-      class="window" 
-      v-if="isOpen"
-      ref="window"
-    >
-      <div class="window-content">
-        <h2>Привет, это окно!</h2>
-        <p>Анимация как в Windows 11 / Linux — растягивание из угла.</p>
-        <button @click="closeWindow">Закрыть</button>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
-import { gsap } from "gsap";
-
-export default {
-  data() {
-    return {
-      isOpen: false,
-      circleColor: "#4CAF50" 
-    };
-  },
-  methods: {
-    openWindow() {
-      this.isOpen = true;
-      this.$nextTick(() => {
-        const window = this.$refs.window;
-        
-        gsap.fromTo(
-          window,
-          { 
-            scale: 0,
-            transformOrigin: "bottom right",
-            opacity: 0,
-            borderRadius: "100%"
-          },
-          { 
-            scale: 1,
-            opacity: 1,
-            borderRadius: "8px",
-            duration: 0.5,
-            ease: "expo.out"
-          }
-        );
-      });
-    },
-    closeWindow() {
-      const window = this.$refs.window;
-      
-      gsap.to(window, {
-        scale: 0,
-        opacity: 0,
-        borderRadius: "100%",
-        duration: 0.3,
-        ease: "power2.in",
-        onComplete: () => {
-          this.isOpen = false;
-        }
-      });
-    }
-  }
-};
-</script>
-
-<style scoped>
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.circle:hover {
-  transform: scale(1.1);
-}
-
-.window {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px;
-  background: white;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  border-radius: 8px;
-}
-
-.window-content {
-  text-align: center;
-}
-
-button {
-  margin-top: 15px;
-  padding: 8px 16px;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-</style> -->
 <template>
   <data class="widget-chat-container">
     <div v-if="!openWidget" class="circle-widget" @click="openWindow"></div>
     <div v-else class="chat-container" ref="widgetChat">
       <ChatHeader @closeWidget="closeWindow"/>
+      <ChatMessages />
+      <ChatInputMessage />
     </div>
   </data>
 </template>
@@ -130,9 +12,14 @@ button {
 <script>
 import { gsap } from "gsap";
 import ChatHeader from "./components/ChatHeader.vue";
+import ChatMessages from "./components/ChatMessages.vue";
+import ChatInputMessage from "./components/ChatInputMessage.vue";
+import 'google-sans/index.css';
 export default {
   components:{
-    ChatHeader
+    ChatHeader,
+    ChatMessages,
+    ChatInputMessage
   },
   data(){
     return{
@@ -185,7 +72,10 @@ export default {
 }
 
 
+
 :root {
+  --height-widget-header: 50px;
+  --border-radius: 12px;
   /* ===== Светлая тема (по умолчанию) ===== */
   --color-bg: #f8f5f2;               /* Мягкий бежево-серый фон */
   --color-text: #333333;             /* Тёмно-серый текст */
@@ -195,6 +85,7 @@ export default {
   --color-border: #e0d5c8;           /* Мягкая граница */
   --color-card: #ffffff;             /* Карточки белые */
   --color-shadow: rgba(0, 0, 0, 0.08); /* Лёгкая тень */
+  --color-textarea-shadow: rgba(0,0,0,0.4);
   --color-hover: #f0e6dd;            /* Тёплый hover */
   --color-disabled: #d3d3d3;         /* Серый для disabled */
   --color-text-light: #5a5a5a;       /* Вторичный текст */
@@ -209,6 +100,7 @@ export default {
   --color-border-dark: #3a3a3a;      /* Граница темнее фона */
   --color-card-dark: #242424;        /* Карточки чуть светлее фона */
   --color-shadow-dark: rgba(0, 0, 0, 0.3); /* Более насыщенная тень */
+  --color-dark-textarea-shadow: rgba(255, 255, 255, 0.4);
   --color-hover-dark: #2e2e2e;       /* Тёмный hover */
   --color-disabled-dark: #555555;    /* Серый для disabled */
   --color-text-light-dark: #b0b0b0;  /* Вторичный текст */
@@ -218,6 +110,8 @@ export default {
 /* ===== Применение светлой темы (по умолчанию) ===== */
 body {
   --bg: var(--color-bg);
+  --inverse-bg: var(--color-bg-dark);
+  --inverse-text: var(--color-text-dark);
   --text: var(--color-text);
   --primary: var(--color-primary);
   --secondary: var(--color-secondary);
@@ -225,10 +119,22 @@ body {
   --border: var(--color-border);
   --card: var(--color-card);
   --shadow: var(--color-shadow);
+  --textarea-shadow: var(--color-textarea-shadow);
   --hover: var(--color-hover);
   --disabled: var(--color-disabled);
   --text-light: var(--color-text-light);
   --link: var(--color-link);
+  --no-user-message-bg: #f0f4f8;
+  --no-user-message-text: #243b53;
+  --user-message-bg: #3d7aed;
+  --user-message-text: #ffffff;
+  --user-message-meta: rgba(255, 255, 255, 0.7);
+  --message-meta-color: rgba(36, 59, 83, 0.6);
+  --message-icon-bg: #e0e7ff;
+  --message-icon-color: #4f46e5;
+  --ai-icon-color: #10b981;
+  --operator-icon-color: #6366f1;
+  --message-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   margin: 0%;
   padding: 0%;
 }
@@ -236,9 +142,12 @@ body {
 /* ===== Применение тёмной темы (если есть класс .dark-theme) ===== */
 body.dark-theme {
   --bg: var(--color-bg-dark);
+  --inverse-bg: var(--color-bg);
+  --inverse-text: var(--color-text);
   --text: var(--color-text-dark);
   --primary: var(--color-primary-dark);
   --secondary: var(--color-secondary-dark);
+  --textarea-shadow: var(--color-dark-textarea-shadow);
   --accent: var(--color-accent-dark);
   --border: var(--color-border-dark);
   --card: var(--color-card-dark);
@@ -247,6 +156,17 @@ body.dark-theme {
   --disabled: var(--color-disabled-dark);
   --text-light: var(--color-text-light-dark);
   --link: var(--color-link-dark);
+  --no-user-message-bg: #2d3748;
+  --no-user-message-text: #f7fafc;
+  --user-message-bg: #4f46e5;
+  --user-message-text: #f3f4f6;
+  --user-message-meta: rgba(243, 244, 246, 0.7);
+  --message-meta-color: rgba(247, 250, 252, 0.6);
+  --message-icon-bg: #3730a3;
+  --message-icon-color: #a5b4fc;
+  --ai-icon-color: #34d399;
+  --operator-icon-color: #818cf8;
+  --message-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 #app{
@@ -281,7 +201,7 @@ body.dark-theme {
   height: 500px;              
   max-height: 80vh;           
   background: var(--bg);      
-  border-radius: 12px;
+  border-radius: var(--border-radius);
   box-shadow: 0 4px 16px var(--shadow);
   border: 1px solid var(--border);
   overflow: hidden;           
