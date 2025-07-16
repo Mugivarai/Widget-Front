@@ -3,6 +3,7 @@
         <div class="input-wrapper">
             <textarea @input="resizeTextarea" v-model="textMessage" ref="textarea" rows="1" @scroll="onScroll"
                 maxlength="5000"
+                @keydown.enter.prevent="sendMessage"
                 placeholder="Напишите сообщение..."></textarea>
             <button class="send-button" @click="sendMessage" :disabled="!textMessage.trim()">
                 <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none">
@@ -37,6 +38,7 @@ export default {
                 let data = new Date();
                 let time = `${data.getHours()}:${data.getMinutes()}`;
                 useChatStore().addMessage(this.textMessage.trim(),'user',time);
+                useChatStore().sendWebSocketMessage(this.textMessage.trim());
                 this.textMessage = ''
                 this.$refs.textarea.style.height = '40px'
             }

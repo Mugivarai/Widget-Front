@@ -1,4 +1,14 @@
-const { defineConfig } = require('@vue/cli-service')
+const { defineConfig } = require('@vue/cli-service');
+
 module.exports = defineConfig({
-  transpileDependencies: true
-})
+  publicPath: './',
+  transpileDependencies: true,
+  productionSourceMap: false,
+  assetsDir: 'assets',
+  filenameHashing: true,
+  configureWebpack: {
+    performance: {
+      hints: false,
+    },
+  },
+});

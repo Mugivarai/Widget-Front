@@ -10,7 +10,6 @@
   "dependencies": {
     "core-js": "^3.8.3",
     "google-sans": "github:agnel/google-sans",
-    "gsap": "^3.13.0",
     "pinia": "^3.0.3",
     "vue": "^3.2.13"
   },
