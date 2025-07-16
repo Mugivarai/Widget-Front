@@ -6,8 +6,8 @@
                 <span>ИИ помощник</span>
                 <div class="ai-status">
                     <div class="ai-status-bg">
-                        <div class="ai-status-circle online"></div>
-                        <span class="ai-status-title online">Online</span>
+                        <div :class="['ai-status-circle ', chatStore.isConnected ? 'online' : 'offline']"></div>
+                        <span :class="['ai-status-title ', chatStore.isConnected ? 'online' : 'offline']">{{chatStore.isConnected?'Online':'Offline'}}</span>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,14 @@
 </template>
 
 <script>
+import { useChatStore } from '@/stores/chat'
 export default {
+    setup() {
+        const chatStore = useChatStore()
+        return {
+            chatStore
+        }
+    },
     methods: {
         closeWidget() {
             this.$emit('closeWidget')
@@ -103,13 +110,13 @@ header {
     border-radius: 50%;
 }
 
-.ai-status-container{
+.ai-status-container {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.ai-status-container > span{
+.ai-status-container>span {
     background-color: var(--bg);
     color: var(--text);
     border-radius: var(--border-radius);
@@ -149,7 +156,7 @@ header {
     display: flex;
 }
 
-.ai-status-bg{
+.ai-status-bg {
     background-color: var(--bg);
     border-radius: var(--border-radius);
     padding: 4px 8px;

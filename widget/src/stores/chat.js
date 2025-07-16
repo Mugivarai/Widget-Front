@@ -91,8 +91,10 @@ export const useChatStore = defineStore("chat", {
         initializeWebSocket(url = process.env.VUE_APP_WEBSOCKET_URL) {
             console.log(url);
             console.log('WS URL:', process.env.VUE_APP_WEBSOCKET_URL);
-            this.socketService = new WebSocketService(url);
-            this.isConnected = true;
+            this.socketService = new WebSocketService(url, {
+                onOpen:  () => { this.isConnected = true; },
+                onClose: () => { this.isConnected = false; }
+            });
         },
         sendWebSocketMessage(message) {
             if (this.socketService) {

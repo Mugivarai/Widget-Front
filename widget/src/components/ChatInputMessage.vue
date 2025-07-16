@@ -41,6 +41,9 @@ export default {
                 useChatStore().sendWebSocketMessage(this.textMessage.trim());
                 this.textMessage = ''
                 this.$refs.textarea.style.height = '40px'
+                this.$nextTick(()=>{
+                    this.$refs.textarea.focus();
+                });
             }
         }
     }

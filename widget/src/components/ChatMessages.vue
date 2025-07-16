@@ -54,10 +54,6 @@ export default {
   },
   mounted(){
     this.chatStore.setScrollElement(this.$refs.mainScroll);
-    this.chatStore.initializeWebSocket();
-  },
-  unmounted(){
-    this.chatStore.closeWebSocket();
   }
 }
 </script>

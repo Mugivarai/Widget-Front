@@ -23,6 +23,7 @@ import ChatHeader from "./components/ChatHeader.vue";
 import ChatMessages from "./components/ChatMessages.vue";
 import ChatInputMessage from "./components/ChatInputMessage.vue";
 import 'google-sans/index.css';
+import { useChatStore } from '@/stores/chat'
 export default {
   components: {
     ChatHeader,
@@ -33,6 +34,12 @@ export default {
     return {
       openWidget: false
     }
+  },
+  mounted(){
+    useChatStore().initializeWebSocket();
+  },
+  unmounted(){
+    useChatStore().closeWebSocket();
   },
   methods: {
     openWindow() {
@@ -331,6 +338,8 @@ body.dark-theme {
     width: 100%;
     height: 100%;
     max-height: 100vh;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
   }
 
   @keyframes chatOpen {
@@ -339,17 +348,17 @@ body.dark-theme {
       z-index: 9999;
       right: 5%;
       bottom: 10%;
-      transform: scale(0) translate(0%,0%);
+      transform: scale(0);
       opacity: 0;
       border-radius: 100%;
     }
 
     to {
       z-index: 9999;
-      right: 50%;
+      right: 0%;
       position: fixed;
-      bottom: 50%;
-      transform: scale(1) translate(50%, 50%);
+      bottom: 0%;
+      transform: scale(1);
       opacity: 1;
       border-radius: 8px;
     }
@@ -358,16 +367,16 @@ body.dark-theme {
   @keyframes chatClose {
     from {
       z-index: 9999;
-      right: 50%;
+      right: 0%;
       position: fixed;
-      bottom: 50%;
-      transform: scale(1) translate(50%, 50%);
+      bottom: 0%;
+      transform: scale(1);
       opacity: 1;
       border-radius: 8px;
     }
 
     to {
-      transform: scale(0) translate(0%,0%);
+      transform: scale(0);
       opacity: 0;
       right: 5%;
       z-index: 9999;
@@ -378,4 +387,5 @@ body.dark-theme {
   }
 
 }
+
 </style>

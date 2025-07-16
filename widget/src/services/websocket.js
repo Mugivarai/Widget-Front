@@ -1,7 +1,7 @@
 import { useChatStore } from "@/stores/chat";
 
 export class WebSocketService {
-    constructor(url) {
+    constructor(url,{onOpen,onClose}) {
         this.url = url;
         this.socket = null;
         this.chatStore = useChatStore();
@@ -9,6 +9,8 @@ export class WebSocketService {
         this.maxReconnectAttempts = 5;
         this.reconnectDelay = 1000;
         this.isManualClose = false;
+        this.onOpenCallback  = onOpen;
+        this.onCloseCallback = onClose;
 
         this.connect();
     }
@@ -19,6 +21,7 @@ export class WebSocketService {
         this.socket.onopen = () => {
             console.log("WebSocket connected");
             this.reconnectAttempts = 0;
+            if (this.onOpenCallback) this.onOpenCallback();
         };
 
         this.socket.onmessage = (event) => {
@@ -40,6 +43,7 @@ export class WebSocketService {
             console.log(
                 `WebSocket closed. Code: ${event.code}, Reason: ${event.reason}`
             );
+            if (this.onCloseCallback) this.onCloseCallback();
 
             if (this.reconnectAttempts < this.maxReconnectAttempts) {
                 this.reconnectAttempts += 1;
