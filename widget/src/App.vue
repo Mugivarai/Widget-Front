@@ -192,7 +192,6 @@ body.dark-theme {
 #app {
   height: 100vh;
   width: 100%;
-  background-color: #3a3a3a;
 }
 
 .widget-chat-container {
