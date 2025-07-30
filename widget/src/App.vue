@@ -196,13 +196,15 @@ body.dark-theme {
 }
 
 .widget-chat-container {
-  position: fixed;
-  z-index: 9999;
-  bottom: 10%;
-  right: 40px;
+  width: 100%;
+  height: 100%;
 }
 
 .circle-widget {
+  position: fixed;
+  z-index: 9999;
+  bottom: 0%;
+  right: 0%;
   cursor: pointer;
   width: 85px;
   height: 85px;
@@ -216,9 +218,9 @@ body.dark-theme {
 }
 
 .chat-container {
-  width: 350px;
-  height: 550px;
-  max-height: 80vh;
+  width: 100%;
+  height: 100%;
+  max-height: 100vh;
   background: var(--bg);
   border-radius: var(--border-radius);
   box-shadow: 0 4px 16px var(--shadow);
@@ -330,34 +332,15 @@ body.dark-theme {
 }
 
 @media (max-width: 480px) {
-  .widget-chat-container {
-    right: 5%;
-  }
-
-  .chat-container{
-    width: 100%;
-    height: 100%;
-    max-height: 100vh;
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-  }
 
   @keyframes chatOpen {
     from {
-      position: fixed;
-      z-index: 9999;
-      right: 5%;
-      bottom: 10%;
       transform: scale(0);
       opacity: 0;
       border-radius: 100%;
     }
 
     to {
-      z-index: 9999;
-      right: 0%;
-      position: fixed;
-      bottom: 0%;
       transform: scale(1);
       opacity: 1;
       border-radius: 8px;
@@ -366,10 +349,6 @@ body.dark-theme {
 
   @keyframes chatClose {
     from {
-      z-index: 9999;
-      right: 0%;
-      position: fixed;
-      bottom: 0%;
       transform: scale(1);
       opacity: 1;
       border-radius: 8px;
@@ -378,10 +357,6 @@ body.dark-theme {
     to {
       transform: scale(0);
       opacity: 0;
-      right: 5%;
-      z-index: 9999;
-      bottom: 10%;
-      position: fixed;
       border-radius: 100%;
     }
   }
